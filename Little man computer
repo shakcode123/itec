@@ -1,0 +1,31 @@
+START   INP FIRST  // first  number we are diving by gets put into accumulator from user input
+        STA FIRST // store first number in memory label
+        LDA FVAL //  on each iteration we need to clear the quotient ans, to prevent overlapping ans
+        STA ANS  // stores 0 into ans which clears quotient ans
+        INP SECOND // second number is the dividend, from user input
+        STA SECOND // store second number at memory label second
+LOOP    LDA FIRST  // start loop, load first Num into accumulator (this is the number that will get subtracted by dividend)
+        BRZ END   // if the value of the first number is 0, then we have dividend as many times as possible, so we now the quotient so branch to end memory label
+        SUB SECOND  // accumulator holds first number, so subtract first number and the second number, which basically is dividing the first by the second 1 time
+        // the result of the accumulator can 
+        // be either positive meaning we can divide more, or negative meaning we are not able to divide at all. 
+        // if the result of accumulator is positive, we can continue subtracting and divide more times, so branch to tes Label
+        // if the result of the accumlator is negative, then division was not possible so branch to fail label which will restart program
+        BRP TES  
+        BRA FAIL // if it did not branch, that means the subtraction resulted in a negative number, that means the division is not possible to branch to fail label
+TES     STA FIRST // store the value of FIrst after 1 division iteration back to First in memory
+        LDA ANS  //  since we divided the number 1 time succesfully, update the quotient by 1 
+        ADD ONE // adds 1 to the accumlator which held previous quotient ans
+        STA ANS  // store updated quotient in ans variable
+        BRA LOOP  // continue subtracting by branching back to the loop label 
+END     LDA ANS // if the result of the first number is 0, second divided evenly into first,  so output the quotient to console
+        OUT // outputs the accumulator which prints the quotient
+        HLT // exit the program
+FAIL    LDA FVAL // if the first - second was negative, then we need to output 0 to show failure, so load 0 into accumulator
+        OUT // prints out 0
+        BRA START // since no valid quotient was found, restart the program by branching back to start
+FIRST   DAT // memory label for first number
+SECOND  DAT // memory label for second number
+ANS     DAT 0 // holds the quotient
+ONE     DAT 1 // holds the 1 so we can incerment the quotient
+FVAL    DAT 0 // holds a 0 so we can output failure
